@@ -46,7 +46,8 @@ spec:
 
 Dans un premier temps lancer le serveur WEB avec :
 
-`kubectl create deployment deno-webserver --image=codebuds/deno-webserver:1.5.0
+`
+kubectl create -f conf_deno-webserver.yaml
 `
 
 et le rendre accessible en local avec :
