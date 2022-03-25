@@ -39,6 +39,15 @@ spec:
 
 3. Mettre à jour le pod du serveur pour se connecter au service MariaDB :
 
+Dans un premier temps lancer le serveur WEB avec :
+
+`kubectl create deployment deno-webserver --image=codebuds/deno-webserver:1.5.0
+`
+
+et le rendre accessible en local avec :
+
+`kubectl expose deployment deno-webserver --port=80 --target-port=8080 --type=NodePort`
+
 If faut ajouter `namespace: default` dans la partie `metadata:` du fichier de configuration du pod deno-webserver.
 
 Afin d'accéder au fichier de configuration du pod deno-webserver il faut faire la commande suivante :
