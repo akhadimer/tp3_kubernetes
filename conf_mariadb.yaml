@@ -53,28 +53,9 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: logs
-          persistentVolumeClaim:
-            claimName: logs
         - name: maria-db
           persistentVolumeClaim:
             claimName: maria-db
-  
----
-
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: maria-db
-spec:
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: standard
-  capacity:
-    storage: 10Gi
-  hostPath:
-    path: /data/maria-db/
   
 ---
 

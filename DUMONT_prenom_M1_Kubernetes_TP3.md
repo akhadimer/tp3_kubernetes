@@ -4,81 +4,43 @@ Thomas Dumont
 
 M1
 ___
+
+1. Un pod MariaDB
+
+Pour le fichier de conf, voir "conf_mariadb.yaml".
+
+Afin de lancer le pod :
+
+`kubectl create -f conf_mariadb.yaml`
+
+2. Un PVC pour stocker les données MariaDB
+
+Partie du fichier de conf permettant de configurer un PVC :
 ```
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
-  generation: 1
-  labels:
-    app: web-build
-  name: web-build
-spec:
-  progressDeadlineSeconds: 600
-  replicas: 3
-  revisionHistoryLimit: 10
-  selector:
-    matchLabels:
-      app: web-build
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: web-build
-    spec:
-      containers:
-      - image: akhadimer/web-build:latest
-        imagePullPolicy: Always
-        name: web-build
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        volumeMounts:
-         - mountPath: /srv/app/pvc
-           name: logs
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
-      volumes:
-       - name: logs
-         persistentVolumeClaim:
-          claimName: logs
+volumes:
+  - name: maria-db
+    persistentVolumeClaim:
+      claimName: maria-db
+```
 
----
-  
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-    name: web-build
-spec:
-    accessModes:
-        - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Retain
-    storageClassName: standard
-    capacity:
-        storage: 3Gi
-    hostPath:
-        path: /data/web-build/
-  
----
-
+```
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-    name: logs
-    namespace: default
+  name: maria-db
+  namespace: default
 spec:
-    accessModes:
-        - ReadWriteOnce
-    resources:
-        requests:
-            storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 ```
+
+3. Mettre à jour le pod du serveur pour se connecter au service MariaDB :
+
+If faut ajouter `namespace: default` dans la partie `metadata:` du fichier de configuration du pod deno-webserver.
+
+Afin d'accéder au fichier de configuration du pod deno-webserver il faut faire la commande suivante :
+
+`kubectl edit deployment deno-webserver`
