@@ -7,11 +7,16 @@ ___
 
 1. Un pod MariaDB
 
+Ajouter les mots de passe nécessaire au bon fonctionnement de la base de données :
+
+`kubectl apply -f mariadb-secret.yaml`
+
 Pour le fichier de conf, voir "conf_mariadb.yaml".
 
 Afin de lancer le pod :
 
 `kubectl create -f conf_mariadb.yaml`
+
 
 2. Un PVC pour stocker les données MariaDB
 
