@@ -44,7 +44,9 @@ spec:
 
 3. Mettre à jour le pod du serveur pour se connecter au service MariaDB :
 
-Dans un premier temps lancer le serveur WEB avec :
+If faut ajouter `namespace: default` dans la partie `metadata:` du fichier de configuration du pod deno-webserver.
+
+Lancer le serveur WEB avec :
 
 `
 kubectl create -f conf_deno-webserver.yaml
@@ -53,9 +55,3 @@ kubectl create -f conf_deno-webserver.yaml
 et le rendre accessible en local avec :
 
 `kubectl expose deployment deno-webserver --port=80 --target-port=8080 --type=NodePort`
-
-If faut ajouter `namespace: default` dans la partie `metadata:` du fichier de configuration du pod deno-webserver.
-
-Afin d'accéder au fichier de configuration du pod deno-webserver il faut faire la commande suivante :
-
-`kubectl edit deployment deno-webserver`
